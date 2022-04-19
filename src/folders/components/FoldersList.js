@@ -10,7 +10,7 @@ const TodoList = (props) => {
   return (
     <ul>
       {props.items.map((item) => (
-        <FolderItem key={item.id} id={item.id} todo={item.name} />
+        <FolderItem key={item.id} id={item.id} name={item.name} />
       ))}
     </ul>
   );

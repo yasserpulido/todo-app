@@ -1,12 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const EditTodo = (props) => {
+const todos = [
+  {
+    id: "01",
+    todo: "Workout",
+    folder: "01",
+  },
+  {
+    id: "02",
+    todo: "Do homeworks",
+    folder: "02",
+  },
+  {
+    id: "03",
+    todo: "Clean the house",
+    folder: "02",
+  },
+  {
+    id: "04",
+    todo: "Study English",
+    folder: "03",
+  },
+];
+
+const UpdateTodo = () => {
   const [enteredTodo, setEnteredTodo] = useState("");
   const [error, setError] = useState(false);
 
   const todoChangeHandler = (event) => {
     setEnteredTodo(event.target.value.trim());
   };
+
+  const todoId = useParams().todoId;
+  const identifiedTodo = todos.find((todo) => todo.id === todoId);
+  
+  useEffect(() => {
+    if (identifiedTodo) {
+      setEnteredTodo(identifiedTodo.todo);
+    }
+  }, [identifiedTodo]);
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -21,9 +54,13 @@ const EditTodo = (props) => {
     setEnteredTodo("");
   };
 
+  if (!identifiedTodo) {
+    return <div>Could not find todo.</div>;
+  }
+
   return (
     <form onSubmit={submitHandler} className="border p-2">
-      <h5>Editing Task "task-name"</h5>
+      <h5>Editing Task "{identifiedTodo.todo}"</h5>
       <div className="row">
         <div className="col-12 mb-2">
           <input
@@ -52,4 +89,4 @@ const EditTodo = (props) => {
   );
 };
 
-export default EditTodo;
+export default UpdateTodo;
