@@ -15,7 +15,7 @@ const Folder = () => {
     const fetchFolders = async () => {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5000/api/folders"
+          process.env.REACT_APP_BACKEND_URL + "/folders"
         );
 
         setLoadedFolders(responseData.folders);

@@ -15,7 +15,7 @@ const TodoItem = (props) => {
   const handleRemove = async () => {
     try {
       await sendRequest(
-        `http://localhost:5000/api/folders/${props.id}`,
+        process.env.REACT_APP_BACKEND_URL + `/folders/${props.id}`,
         "DELETE"
       );
       props.toggleFetchHandler(true);

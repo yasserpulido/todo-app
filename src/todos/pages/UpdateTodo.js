@@ -28,7 +28,7 @@ const UpdateTodo = () => {
 
     try {
       await sendRequest(
-        `http://localhost:5000/api/todos/${todoId}`,
+        process.env.REACT_APP_BACKEND_URL + `/todos/${todoId}`,
         "PATCH",
         JSON.stringify({
           name: enteredName,

@@ -23,7 +23,7 @@ const NewFolder = (props) => {
 
     try {
       await sendRequest(
-        "http://localhost:5000/api/folders",
+        process.env.REACT_APP_BACKEND_URL + "/folders",
         "POST",
         JSON.stringify({
           name: enteredFolderName,

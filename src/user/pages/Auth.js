@@ -10,7 +10,8 @@ const Auth = () => {
   const [enteredEmail, setEnteredEmail] = useState("user@todo.com");
   const [enteredPassword, setEnteredPassword] = useState("testers");
   const [error, setError] = useState(false);
-  const { isLoading, errorMessage, show, sendRequest, setShow } = useHttpClient();
+  const { isLoading, errorMessage, show, sendRequest, setShow } =
+    useHttpClient();
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value.trim());
@@ -33,7 +34,7 @@ const Auth = () => {
 
     try {
       await sendRequest(
-        "http://localhost:5000/api/users/login",
+        process.env.REACT_APP_BACKEND_URL + "/users/login",
         "POST",
         JSON.stringify({
           email: enteredEmail,

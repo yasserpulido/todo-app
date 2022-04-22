@@ -19,11 +19,9 @@ const Todo = () => {
     const fetchFolders = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5000/api/todos/${folderId}`
+          process.env.REACT_APP_BACKEND_URL + `/todos/${folderId}`
         );
 
-        console.log("todo");
-        console.log(responseData.todos);
         setLoadedTodos(responseData.todos);
         setToggleFetch(false);
       } catch (err) {}

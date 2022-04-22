@@ -10,7 +10,7 @@ const NewTodo = (props) => {
     useHttpClient();
 
   const todoChangeHandler = (event) => {
-    setEnteredTodo(event.target.value.trim());
+    setEnteredTodo(event.target.value);
   };
 
   const submitHandler = async (event) => {
@@ -23,7 +23,7 @@ const NewTodo = (props) => {
 
     try {
       await sendRequest(
-        "http://localhost:5000/api/todos",
+        process.env.REACT_APP_BACKEND_URL + "/todos",
         "POST",
         JSON.stringify({
           name: enteredTodo,
@@ -33,8 +33,6 @@ const NewTodo = (props) => {
           "Content-Type": "application/json",
         }
       );
-      console.log("newtodo");
-      setError(false);
       setEnteredTodo("");
       props.setToggleFetch(true);
     } catch (err) {}

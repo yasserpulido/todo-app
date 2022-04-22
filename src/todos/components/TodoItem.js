@@ -16,7 +16,7 @@ const TodoItem = (props) => {
   const handleRemove = async () => {
     try {
       await sendRequest(
-        `http://localhost:5000/api/todos/${props.id}`,
+        process.env.REACT_APP_BACKEND_URL + `/todos/${props.id}`,
         "DELETE"
       );
       props.toggleFetchHandler(true);
@@ -27,7 +27,7 @@ const TodoItem = (props) => {
   const statusHandler = async (event) => {
     try {
       await sendRequest(
-        `http://localhost:5000/api/todos/${props.id}`,
+        process.env.REACT_APP_BACKEND_URL + `/todos/${props.id}`,
         "PATCH",
         JSON.stringify({
           name: props.name,
