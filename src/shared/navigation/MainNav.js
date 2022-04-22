@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth-context";
@@ -18,9 +18,9 @@ const MainNav = () => {
               </Link>
             </Nav>
             <Nav className="justify-content-end">
-              <Link to={"/"} className="text-reset text-decoration-none">
+              <Button onClick={auth.logout} variant="link" className="text-reset text-decoration-none">
                 Logout
-              </Link>
+              </Button>
             </Nav>
           </Container>
         </Navbar>

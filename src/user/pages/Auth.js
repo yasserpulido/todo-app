@@ -7,8 +7,8 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 const Auth = () => {
   const auth = useContext(AuthContext);
 
-  const [enteredEmail, setEnteredEmail] = useState("user@todo.com");
-  const [enteredPassword, setEnteredPassword] = useState("testers");
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
   const [error, setError] = useState(false);
   const { isLoading, errorMessage, show, sendRequest, setShow } =
     useHttpClient();
