@@ -1,3 +1,7 @@
+# The React App is in Firebase
+
+This project was hosted with Firebase in the following link (https://todo-app-b30c6.web.app/).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
