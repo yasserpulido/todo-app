@@ -1,3 +1,10 @@
+# Login 
+
+To login please use:
+
+User: user@todo.com
+Password: testers
+
 # The React App is in Firebase
 
 This project was hosted with Firebase in the following link (https://todo-app-b30c6.web.app/).
