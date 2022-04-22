@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Nav } from "react-bootstrap";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { AuthContext } from "../context/auth-context";
@@ -8,25 +8,23 @@ const MainNav = () => {
   const auth = useContext(AuthContext);
 
   return (
-    <header>
-      <Nav className="justify-content-between mb-5">
-        <Nav.Item>
-          {auth.isLoggedIn && (
-            <Nav.Link className="text-reset">
-              <Link to={"/"} className="text-decoration-none text-reset">
+    <header className="mb-5">
+      {auth.isLoggedIn && (
+        <Navbar>
+          <Container>
+            <Nav className="justify-content-end">
+              <Link to={"/"} className="text-reset text-decoration-none">
                 <strong>TODO</strong>
               </Link>
-            </Nav.Link>
-          )}
-        </Nav.Item>
-        <Nav.Item>
-          {auth.isLoggedIn && (
-            <Nav.Link className="text-reset" onClick={auth.logout}>
-              Logout
-            </Nav.Link>
-          )}
-        </Nav.Item>
-      </Nav>
+            </Nav>
+            <Nav className="justify-content-end">
+              <Link to={"/"} className="text-reset text-decoration-none">
+                Logout
+              </Link>
+            </Nav>
+          </Container>
+        </Navbar>
+      )}
     </header>
   );
 };

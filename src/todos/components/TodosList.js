@@ -3,6 +3,10 @@ import React from "react";
 import TodoItem from "./TodoItem";
 
 const TodoList = (props) => {
+  const toggleFetchHandler = (toggleFetch) => {
+    props.setToggleFetch(true);
+  };
+
   if (props.items.length === 0) {
     return <p>No todos found.</p>;
   }
@@ -10,7 +14,13 @@ const TodoList = (props) => {
   return (
     <ul>
       {props.items.map((item) => (
-        <TodoItem key={item.id} id={item.id} todo={item.todo} />
+        <TodoItem
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          status={item.status}
+          toggleFetchHandler={toggleFetchHandler}
+        />
       ))}
     </ul>
   );

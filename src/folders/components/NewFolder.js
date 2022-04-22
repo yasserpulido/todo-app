@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { Button, Spinner, Modal } from "react-bootstrap";
 
-const NewFolder = () => {
+import { useHttpClient } from "../../shared/hooks/http-hook";
+
+const NewFolder = (props) => {
   const [enteredFolderName, setEnteredFolderName] = useState("");
   const [error, setError] = useState(false);
+  const { isLoading, errorMessage, show, sendRequest, setShow } =
+    useHttpClient();
 
   const folderNameChangeHandler = (event) => {
     setEnteredFolderName(event.target.value);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     if (enteredFolderName.trim().length === 0) {
@@ -16,35 +21,70 @@ const NewFolder = () => {
       return;
     }
 
-    setError(false);
-    console.log(enteredFolderName);
-    setEnteredFolderName("");
+    try {
+      await sendRequest(
+        "http://localhost:5000/api/folders",
+        "POST",
+        JSON.stringify({
+          name: enteredFolderName,
+        }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      setError(false);
+      setEnteredFolderName("");
+      props.setToggleFetch(true);
+    } catch (err) {}
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <div className="row">
-        <div className="col">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="New Folder"
-            onChange={folderNameChangeHandler}
-            value={enteredFolderName}
-          />
-          {error && (
-            <small className="text-danger">
-              Folder's input cannot be empty.
-            </small>
-          )}
+    <React.Fragment>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error Message</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{errorMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShow(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <form onSubmit={submitHandler}>
+        <div className="row">
+          <div className="col">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="New Folder"
+              onChange={folderNameChangeHandler}
+              value={enteredFolderName}
+            />
+            {error && (
+              <small className="text-danger">
+                Folder's input cannot be empty.
+              </small>
+            )}
+          </div>
+          <div className="col-auto">
+            <Button variant="primary" type="submit" disabled={isLoading}>
+              {isLoading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
+              Add
+            </Button>
+          </div>
         </div>
-        <div className="col-auto">
-          <button type="submit" className="btn btn-primary">
-            Add
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </React.Fragment>
   );
 };
 

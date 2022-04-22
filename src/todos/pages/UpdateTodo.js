@@ -1,91 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Modal, Button, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const todos = [
-  {
-    id: "01",
-    todo: "Workout",
-    folder: "01",
-  },
-  {
-    id: "02",
-    todo: "Do homeworks",
-    folder: "02",
-  },
-  {
-    id: "03",
-    todo: "Clean the house",
-    folder: "02",
-  },
-  {
-    id: "04",
-    todo: "Study English",
-    folder: "03",
-  },
-];
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const UpdateTodo = () => {
-  const [enteredTodo, setEnteredTodo] = useState("");
+  const todoId = useParams().todoId;
+  const todoName = useParams().todoName;
+  const [enteredName, setEnteredName] = useState(todoName);
   const [error, setError] = useState(false);
+  const { isLoading, errorMessage, show, sendRequest, setShow } =
+    useHttpClient();
+  const navigate = useNavigate();
 
   const todoChangeHandler = (event) => {
-    setEnteredTodo(event.target.value.trim());
+    setEnteredName(event.target.value);
   };
 
-  const todoId = useParams().todoId;
-  const identifiedTodo = todos.find((todo) => todo.id === todoId);
-  
-  useEffect(() => {
-    if (identifiedTodo) {
-      setEnteredTodo(identifiedTodo.todo);
-    }
-  }, [identifiedTodo]);
-
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
-    if (enteredTodo.trim().length === 0) {
+    if (enteredName.trim().length === 0) {
       setError(true);
       return;
     }
 
-    setError(false);
-    console.log(enteredTodo);
-    setEnteredTodo("");
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/todos/${todoId}`,
+        "PATCH",
+        JSON.stringify({
+          name: enteredName,
+        }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      setError(false);
+      setEnteredName("");
+      navigate("/folders");
+    } catch (err) {}
   };
 
-  if (!identifiedTodo) {
-    return <div>Could not find todo.</div>;
-  }
-
   return (
-    <form onSubmit={submitHandler} className="border p-2">
-      <h5>Editing Task "{identifiedTodo.todo}"</h5>
-      <div className="row">
-        <div className="col-12 mb-2">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Edit Task"
-            onChange={todoChangeHandler}
-            value={enteredTodo}
-          />
-          {error && (
-            <small className="text-danger">Todo's input cannot be empty.</small>
-          )}
+    <React.Fragment>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error Message</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{errorMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShow(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <form onSubmit={submitHandler} className="border p-2">
+        <h5>Editing Task "{todoName}"</h5>
+        <div className="row">
+          <div className="col-12 mb-2">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Edit Task"
+              onChange={todoChangeHandler}
+              value={enteredName}
+            />
+            {error && (
+              <small className="text-danger">
+                Todo's input cannot be empty.
+              </small>
+            )}
+          </div>
+          <div className="col-auto">
+            <Button variant="primary" type="submit" disabled={isLoading}>
+              {isLoading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
+              Save
+            </Button>
+          </div>
+          <div className="col-auto">
+            <button type="button" className="btn btn-primary">
+              <Link to={"/folders"} className="text-reset text-decoration-none">
+                Cancel
+              </Link>
+            </button>
+          </div>
         </div>
-        <div className="col-auto">
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-        </div>
-        <div className="col-auto">
-          <button type="button" className="btn btn-primary">
-            Cancel
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </React.Fragment>
   );
 };
 

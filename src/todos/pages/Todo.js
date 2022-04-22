@@ -1,44 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Modal, Button, Spinner, Breadcrumb } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import TodosList from "../components/TodosList";
 import NewTodo from "../components/NewTodo";
-
-const todos = [
-  {
-    id: "01",
-    todo: "Workout",
-    folder: "01",
-  },
-  {
-    id: "02",
-    todo: "Do homeworks",
-    folder: "02",
-  },
-  {
-    id: "03",
-    todo: "Clean the house",
-    folder: "02",
-  },
-  {
-    id: "04",
-    todo: "Study English",
-    folder: "03",
-  },
-];
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const Todo = () => {
   const folderId = useParams().folderId;
-  const todosList = todos.filter((item) => item.folder === folderId);
+  const folderName = useParams().folderName;
+  const [toggleFetch, setToggleFetch] = useState(false);
+  const [loadedTodos, setLoadedTodos] = useState();
+  const { isLoading, errorMessage, show, sendRequest, setShow } =
+    useHttpClient();
+
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5000/api/todos/${folderId}`
+        );
+
+        console.log("todo");
+        console.log(responseData.todos);
+        setLoadedTodos(responseData.todos);
+        setToggleFetch(false);
+      } catch (err) {}
+    };
+    fetchFolders();
+  }, [sendRequest, toggleFetch, folderId]);
 
   return (
-    <div className="border container p-3">
-      <h5>
-        <strong>To-Do List</strong>
-      </h5>
-      <TodosList items={todosList} />
-      <NewTodo />
-    </div>
+    <React.Fragment>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error Message</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{errorMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShow(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <div className="border p-3">
+        <Breadcrumb>
+          <Breadcrumb.Item as="div" active>
+            <Link to={"/folders"} className="text-reset text-decoration-none">
+              <strong>Folders</strong>
+            </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item as="div" active>
+            {folderName}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        {isLoading && (
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" />
+          </div>
+        )}
+        {!isLoading && loadedTodos && (
+          <TodosList items={loadedTodos} setToggleFetch={setToggleFetch} />
+        )}
+        <NewTodo folderId={folderId} setToggleFetch={setToggleFetch} />
+      </div>
+    </React.Fragment>
   );
 };
 

@@ -27,8 +27,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Jumbotron />} exact />
         <Route path="/folders" element={<Folder />} exact />
-        <Route path="/folders/:folderId" element={<Todo />} exact />
-        <Route path="/todo/:todoId" element={<UpdateTodo />} exact />
+        <Route path="/folders/:folderName/:folderId" element={<Todo />} exact />
+        <Route path="/todo/:todoName/:todoId" element={<UpdateTodo />} exact />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );
