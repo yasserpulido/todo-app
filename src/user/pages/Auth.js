@@ -4,6 +4,8 @@ import { Button, Spinner, Modal } from "react-bootstrap";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
+import "./Auth.css";
+
 const Auth = () => {
   const auth = useContext(AuthContext);
 
@@ -61,7 +63,7 @@ const Auth = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <form onSubmit={submitHandler} className="border p-3">
+      <form onSubmit={submitHandler} className="border p-3 shadow login">
         <h5>Hello</h5>
         <hr />
         <div className="row">

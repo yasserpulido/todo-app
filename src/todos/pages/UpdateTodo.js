@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
+import "./UpdateTodo.css";
+
 const UpdateTodo = () => {
   const todoId = useParams().todoId;
   const todoName = useParams().todoName;
@@ -56,7 +58,10 @@ const UpdateTodo = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <form onSubmit={submitHandler} className="border p-2">
+      <form
+        onSubmit={submitHandler}
+        className="border p-3 shadow update-todo-form"
+      >
         <h5>Editing Task "{todoName}"</h5>
         <div className="row">
           <div className="col-12 mb-2">

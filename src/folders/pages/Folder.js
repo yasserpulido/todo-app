@@ -38,7 +38,7 @@ const Folder = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <div className="border p-3">
+      <div className="border p-3 shadow">
         <Breadcrumb>
           <Breadcrumb.Item active>
             <strong>Folders</strong>
